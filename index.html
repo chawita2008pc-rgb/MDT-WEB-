@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MDT Racing | Equipo de Karting Argentino</title>
+    <meta name="description" content="MDT Racing: Equipo de Karting profesional en Buenos Aires. Formación de pilotos, atención en pista y servicio integral.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏎️</text></svg>">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-card: #1c1c1c;
+            --accent: #e63946; /* Rojo Racing */
+            --accent-hover: #ff4d5a;
+            --accent-glow: rgba(230, 57, 70, 0.4);
+            --white: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a2a;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--white);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* --- UTILITIES --- */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .text-center { text-align: center; }
+        .text-accent { color: var(--accent); }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 35px;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--white);
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent);
+            box-shadow: 0 0 25px var(--accent-glow);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--white);
+            color: var(--white);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--white);
+            color: var(--bg-primary);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            display: block;
+        }
+
+        /* --- ANIMATIONS --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-style: italic;
+            color: var(--white);
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logo span { color: var(--accent); }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after { width: 100%; }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        /* --- HERO --- */
+        #hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            /* High quality karting image */
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1599474924187-334a4ae513ea?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .hero-content {
+            z-index: 2;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            line-height: 0.9;
+            margin-bottom: 1rem;
+            font-style: italic;
+            text-shadow: 0 0 30px rgba(0,0,0,0.8);
+            background: -webkit-linear-gradient(45deg, #fff, #ccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .hero-tagline {
+            font-size: 1.3rem;
+            color: #ddd;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(230, 57, 70, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--accent);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* --- ABOUT & COUNTERS --- */
+        #about { background-color: var(--bg-secondary); }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .counters-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .counter-item h3 {
+            font-size: 3.5rem;
+            color: var(--accent);
+            line-height: 1;
+            font-family: var(--font-heading);
+        }
+
+        .counter-item p {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            color: var(--text-secondary);
+        }
+
+        /* --- TIMELINE --- */
+        #timeline {
+            background-color: var(--bg-primary);
+            position: relative;
+        }
+
+        .timeline-wrapper {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Linea central */
+        .timeline-wrapper::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: var(--border);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            right: -8px;
+            background-color: var(--bg-primary);
+            border: 3px solid var(--accent);
+            top: 25px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .left { left: 0; }
+        .right { left: 50%; }
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 28px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid var(--border);
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent var(--bg-card);
+        }
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 28px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid var(--border);
+            border-width: 10px 10px 10px 0;
+            border-color: transparent var(--bg-card) transparent transparent;
+        }
+        .right::after { left: -8px; }
+
+        .timeline-content {
+            padding: 25px 30px;
+            background-color: var(--bg-card);
+            position: relative;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            border-color: var(--accent);
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .timeline-year {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .timeline-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-left: 10px;
+            vertical-align: middle;
+            font-weight: 600;
+        }
+
+        /* --- ACHIEVEMENTS --- */
+        #achievements {
+            background-color: #0f0f0f;
+            background-image: radial-gradient(#222 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .palmares-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .trophy-card {
+            background: linear-gradient(145deg, var(--bg-card), #141414);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: var(--transition);
+        }
+
+        .trophy-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(230, 57, 70, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .trophy-icon {
+            font-size: 3rem;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+        }
+
+        .trophy-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .trophy-year {
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        /* --- TEAM --- */
+        #team { background-color: var(--bg-primary); }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .team-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--border);
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .team-card:hover::before { transform: scaleX(1); }
+
+        .avatar-placeholder {
+            width: 120px;
+            height: 120px;
+            background: #252525;
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .star-badge {
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            color: #000;
+            font-size: 0.75rem;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 800;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        .role {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: block;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .highlight-data {
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.05);
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        /* --- SERVICES --- */
+        #services { background-color: var(--bg-secondary); }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .service-item {
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        
+        .service-item:hover {
+            border-color: var(--accent);
+        }
+
+        .service-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+
+        .cta-box {
+            background: linear-gradient(90deg, #1a1a1a, #252525);
+            padding: 50px;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* --- SPONSORS --- */
+        #sponsors {
+            background-color: var(--bg-primary);
+            text-align: center;
+        }
+
+        .sponsors-flex {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .sponsor-card {
+            min-width: 250px;
+            padding: 30px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .sponsor-card:hover {
+            background: rgba(255,255,255,0.05);
+            transform: scale(1.05);
+            border-color: #333;
+        }
+
+        .sponsor-name {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 5px;
+        }
+
+        .sponsor-detail {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- CATEGORIES --- */
+        #categories {
+            padding: 50px 0;
+            background: linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary));
+            border-top: 1px solid var(--border);
+        }
+
+        .categories-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .cat-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            cursor: default;
+            color: var(--text-secondary);
+        }
+
+        .cat-pill:hover {
+            border-color: var(--accent);
+            color: var(--white);
+            background: var(--accent);
+            box-shadow: 0 0 15px rgba(230, 57, 70, 0.4);
+        }
+
+        /* --- CONTACT --- */
+        #contact {
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), 
+                        url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            padding: 120px 0;
+        }
+
+        .contact-box {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-box h2 { font-size: 3.5rem; margin-bottom: 20px; color: var(--white); }
+        .contact-box p { font-size: 1.3rem; margin-bottom: 50px; color: #ccc; }
+        
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #050505;
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            color: var(--white);
+        }
+        
+        .footer-logo span { color: var(--accent); }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 992px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .counters-container { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+            .hero-title { font-size: 4rem; }
+        }
+
+        @media (max-width: 768px) {
+            .section-padding { padding: 60px 0; }
+            
+            .hamburger { display: block; z-index: 1001; }
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                flex-direction: column;
+                background-color: #000;
+                width: 100%;
+                height: 100vh;
+                justify-content: center;
+                align-items: center;
+                transition: 0.3s;
+                padding-top: 60px;
+            }
+
+            .nav-menu.active { left: 0; }
+            
+            .hero-title { font-size: 3rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            .location-badge { margin-bottom: 1rem; }
+            
+            /* Timeline Mobile Fix */
+            .timeline-wrapper::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 15px; }
+            .timeline-item::before { left: 60px; border: medium solid white; border-width: 10px 10px 10px 0; border-color: transparent var(--bg-card) transparent transparent; }
+            .left::after, .right::after { left: 23px; }
+            .right { left: 0%; }
+            .left::before { border-width: 10px 10px 10px 0; border-color: transparent var(--bg-card) transparent transparent; left: 60px; }
+
+            .cta-box { text-align: center; justify-content: center; flex-direction: column; padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">MDT <span>RACING</span></a>
+            
+            <ul class="nav-menu">
+                <li><a href="#hero" class="nav-link">Inicio</a></li>
+                <li><a href="#about" class="nav-link">Nosotros</a></li>
+                <li><a href="#timeline" class="nav-link">Trayectoria</a></li>
+                <li><a href="#achievements" class="nav-link">Logros</a></li>
+                <li><a href="#team" class="nav-link">Equipo</a></li>
+                <li><a href="#services" class="nav-link">Servicios</a></li>
+                <li><a href="#contact" class="nav-link">Contacto</a></li>
+            </ul>
+
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero">
+        <div class="hero-content">
+            <div class="location-badge">📍 Buenos Aires, Argentina</div>
+            <h1 class="hero-title reveal">MDT RACING</h1>
+            <h2 class="hero-subtitle reveal">EQUIPO DE KARTING PROFESIONAL</h2>
+            <p class="hero-tagline reveal">"Formamos campeones, tanda a tanda."</p>
+            <a href="#contact" class="btn btn-primary reveal">CONTACTANOS</a>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section-padding">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title reveal">QUIÉNES SOMOS</h2>
+                <span class="section-subtitle reveal">Pasión por la velocidad y la formación</span>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-text reveal">
+                    <h3 style="margin-bottom: 20px;">MDT equipo de Kart</h3>
+                    <p>Somos un equipo argentino de karting que combina la competición de alto nivel con la formación integral de nuevos pilotos. Operamos principalmente en el <strong>Kartódromo de Buenos Aires</strong> y <strong>Ciudad Evita</strong>, y durante el verano en Mar del Plata.</p>
+                    <p>Ofrecemos un servicio completo "llave en mano": desde la escuela de karting para principiantes hasta el asesoramiento técnico avanzado en pista, alineación en mesa plana y mantenimiento.</p>
+                    <p>Nuestro enfoque educativo profesional, apoyado en tecnología como <strong>Mychron 5</strong> y <strong>GoPro</strong>, garantiza el progreso constante de nuestros pilotos.</p>
+                    <a href="https://ig.me/m/mdtracing.kart" target="_blank" class="btn btn-outline" style="margin-top: 15px;">Conocer Más</a>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card reveal">
+                        <span class="feature-icon">🎯</span>
+                        <h3>Entrenamiento</h3>
+                        <p>Formación profesional de pilotos tanda a tanda.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <span class="feature-icon">🔧</span>
+                        <h3>Técnica</h3>
+                        <p>Asesoramiento, setup y asistencia en pista.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <span class="feature-icon">📊</span>
+                        <h3>Análisis</h3>
+                        <p>Telemetría Mychron 5 + GoPro.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <span class="feature-icon">🏠</span>
+                        <h3>Integral</h3>
+                        <p>Mantenimiento, guardería y alineación.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="counters-container" id="counters">
+                <div class="counter-item text-center reveal">
+                    <h3 data-target="3">0</h3>
+                    <p>Años Compitiendo</p>
+                </div>
+                <div class="counter-item text-center reveal">
+                    <h3 data-target="5">0</h3>
+                    <p>Categorías</p>
+                </div>
+                <div class="counter-item text-center reveal">
+                    <h3 data-target="3013">0</h3>
+                    <p>Seguidores</p>
+                </div>
+                <div class="counter-item text-center reveal">
+                    <h3 data-target="151">0</h3>
+                    <p>Posts & Historias</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE SECTION -->
+    <section id="timeline" class="section-padding">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title reveal">NUESTRA TRAYECTORIA</h2>
+                <span class="section-subtitle reveal">El camino recorrido</span>
+            </div>
+            
+            <div class="timeline-wrapper">
+                <!-- 2023 -->
+                <div class="timeline-item left reveal">
+                    <div class="timeline-content">
+                        <span class="timeline-year">2023</span>
+                        <h3>Prokart Championship</h3>
+                        <p>Temporada exitosa con victorias y podios documentados, estableciendo las bases competitivas del equipo.</p>
+                        <span class="timeline-badge">Inicios</span>
+                    </div>
+                </div>
+                
+                <!-- 2024 -->
+                <div class="timeline-item right reveal">
+                    <div class="timeline-content">
+                        <span class="timeline-year">2024</span>
+                        <h3>Consolidación</h3>
+                        <p>Destacada participación en <strong>Iame Series Argentina</strong> (P7 en 4ta fecha) y <strong>Rotax Max Challenge</strong>.</p>
+                        <span class="timeline-badge">Nacional</span>
+                    </div>
+                </div>
+
+                <!-- Enero 2025 -->
+                <div class="timeline-item left reveal">
+                    <div class="timeline-content">
+                        <span class="timeline-year">Ene 2025</span>
+                        <h3>Verano en MDQ</h3>
+                        <p>Temporada intensiva en Mar del Plata con carreras y entrenamientos de pretemporada.</p>
+                        <span class="timeline-badge">Pretemporada</span>
+                    </div>
+                </div>
+
+                <!-- 2025 Sudam -->
+                <div class="timeline-item right reveal">
+                    <div class="timeline-content">
+                        <span class="timeline-year">2025</span>
+                        <h3>Victoria + Pole 🏆</h3>
+                        <p><strong>Facundo De Vicenti</strong> logra Victoria y Pole Position en Sudam Senior (Cierre Champion Cup).</p>
+                        <span class="timeline-badge">Hito</span>
+                    </div>
+                </div>
+
+                <!-- 2025 Debut -->
+                <div class="timeline-item left reveal">
+                    <div class="timeline-content">
+                        <span class="timeline-year">2025</span>
+                        <h3>Nuevos Talentos</h3>
+                        <p>Debut de <strong>Thomy</strong> en la categoría Old School Senior con el kart número <strong>#896</strong>.</p>
+                        <span class="timeline-badge">Debut</span>
+                    </div>
+                </div>
+
+                <!-- 2026 Futuro -->
+                <div class="timeline-item right reveal">
+                    <div class="timeline-content">
+                        <span class="timeline-year">2026</span>
+                        <h3>Futuro</h3>
+                        <p>Lanzamiento del nuevo diseño de equipo (TEAM DESIGN 26') y expansión de la estructura.</p>
+                        <span class="timeline-badge">Próximamente</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACHIEVEMENTS SECTION -->
+    <section id="achievements" class="section-padding">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title reveal">PALMARÉS</h2>
+                <span class="section-subtitle reveal">Resultados que nos avalan</span>
+            </div>
+
+            <div class="palmares-grid">
+                <div class="trophy-card reveal">
+                    <div class="trophy-icon">🏆</div>
+                    <div class="trophy-info">
+                        <span class="trophy-year">2025 • Sudam Senior</span>
+                        <h3>Victoria + Pole Position</h3>
+                        <p>Facundo De Vicenti dominó el cierre del Champion Cup ganando todo.</p>
+                    </div>
+                </div>
+
+                <div class="trophy-card reveal">
+                    <div class="trophy-icon">⏱️</div>
+                    <div class="trophy-info">
+                        <span class="trophy-year">2025 • Clasificación</span>
+                        <h3>Récord de Vuelta</h3>
+                        <p>Mejor registro de clasificación en Sudam Senior.</p>
+                    </div>
+                </div>
+
+                <div class="trophy-card reveal">
+                    <div class="trophy-icon">🏁</div>
+                    <div class="trophy-info">
+                        <span class="trophy-year">2024 • IAME Series</span>
+                        <h3>Top 7 Argentina</h3>
+                        <p>Excelente desempeño en la 4ta fecha del campeonato nacional.</p>
+                    </div>
+                </div>
+                
+                 <div class="trophy-card reveal">
+                    <div class="trophy-icon">🥉</div>
+                    <div class="trophy-info">
+                        <span class="trophy-year">2023 • Prokart</span>
+                        <h3>Podios Múltiples</h3>
+                        <p>Trofeos documentados a lo largo de la temporada 2023.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM SECTION -->
+    <section id="team" class="section-padding">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title reveal">NUESTRO EQUIPO</h2>
+                <span class="section-subtitle reveal">Familia y Profesionales</span>
+            </div>
+
+            <div class="team-grid">
+                <!-- Facundo -->
+                <div class="team-card reveal">
+                    <div class="star-badge">⭐ Estrella</div>
+                    <div class="avatar-placeholder">🏎️</div>
+                    <h3>Facundo De Vicenti</h3>
+                    <span class="role">Piloto Senior</span>
+                    <p>Ganador y Poleman en Sudam Senior. El referente de velocidad y técnica del equipo.</p>
+                    <div class="highlight-data">Champion Cup 2025 Winner</div>
+                </div>
+
+                <!-- Thomy -->
+                <div class="team-card reveal">
+                    <div class="avatar-placeholder">🔰</div>
+                    <h3>Thomy</h3>
+                    <span class="role">Piloto Old School</span>
+                    <p>Debutante prometedor en la categoría Old School Senior con el número #896.</p>
+                    <div class="highlight-data">Kart #896</div>
+                </div>
+
+                <!-- Lucho -->
+                <div class="team-card reveal">
+                    <div class="avatar-placeholder">🔧</div>
+                    <h3>Lucho Pianelli</h3>
+                    <span class="role">Staff Técnico</span>
+                    <p>Miembro clave del staff. Figura central en la mecánica y asistencia del equipo.</p>
+                    <div class="highlight-data">Staff Principal</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="section-padding">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title reveal">SERVICIOS & ESCUELA</h2>
+                <span class="section-subtitle reveal">"Iníciate en el mundo del Kart a un costo accesible"</span>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-item reveal">
+                    <span class="service-icon">🏎️</span>
+                    <h3>Escuela de Karting</h3>
+                    <p>Karts disponibles para principiantes. Aprendé las bases del manejo deportivo.</p>
+                </div>
+                <div class="service-item reveal">
+                    <span class="service-icon">👨‍🏫</span>
+                    <h3>Entrenamiento</h3>
+                    <p>Coaching personalizado en pista para bajar tus tiempos vuelta a vuelta.</p>
+                </div>
+                <div class="service-item reveal">
+                    <span class="service-icon">📹</span>
+                    <h3>Video Análisis</h3>
+                    <p>Revisión técnica con cámaras GoPro para corregir errores de manejo.</p>
+                </div>
+                <div class="service-item reveal">
+                    <span class="service-icon">📊</span>
+                    <h3>Telemetría</h3>
+                    <p>Análisis de datos con Mychron 5 para optimizar el rendimiento.</p>
+                </div>
+                <div class="service-item reveal">
+                    <span class="service-icon">📐</span>
+                    <h3>Alineación</h3>
+                    <p>Servicio profesional de mesa plana y setup de chasis.</p>
+                </div>
+                <div class="service-item reveal">
+                    <span class="service-icon">🏠</span>
+                    <h3>Guardería</h3>
+                    <p>Mantenimiento, limpieza y guardería segura para tu kart.</p>
+                </div>
+            </div>
+
+            <div class="cta-box reveal">
+                <div>
+                    <h3 style="margin-bottom: 10px; font-size: 1.8rem;">¿Querés iniciarte en el karting?</h3>
+                    <p style="color: #aaa; font-size: 1.1rem;">Tenemos todo listo para que empieces a girar hoy mismo.</p>
+                </div>
+                <a href="https://ig.me/m/mdtracing.kart" target="_blank" class="btn btn-primary">Escribinos por DM →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SPONSORS -->
+    <section id="sponsors" class="section-padding">
+        <div class="container">
+            <h2 class="section-title reveal" style="font-size: 2rem; margin-bottom: 40px;">NUESTROS SPONSORS</h2>
+            <div class="sponsors-flex reveal">
+                <div class="sponsor-card">
+                    <div class="sponsor-name">CROSSMASTER</div>
+                    <div class="sponsor-detail">Herramientas Profesionales</div>
+                </div>
+                <div class="sponsor-card">
+                    <div class="sponsor-name">DOWEN PAGIO</div>
+                    <div class="sponsor-detail">Racing & Herramientas</div>
+                </div>
+                <div class="sponsor-card">
+                    <div class="sponsor-name">TRANS-PONY</div>
+                    <div class="sponsor-detail">Logística y Transporte</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section id="categories">
+        <div class="container text-center">
+            <h4 style="margin-bottom: 20px; color: #666; font-size: 0.9rem; letter-spacing: 2px;">CATEGORÍAS ACTIVAS</h4>
+            <div class="categories-wrapper">
+                <div class="cat-pill">Sudam Senior</div>
+                <div class="cat-pill">Iame Series Argentina</div>
+                <div class="cat-pill">Rotax Max Challenge</div>
+                <div class="cat-pill">Prokart Championship</div>
+                <div class="cat-pill">Old School Senior</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT CTA -->
+    <section id="contact">
+        <div class="container contact-box">
+            <h2 class="reveal">SUMATE AL EQUIPO</h2>
+            <p class="reveal">¿Querés ser parte de MDT Racing? ¿Buscás formarte como piloto profesional? ¿Necesitás asesoramiento técnico? Pasamos un lindo finde todos juntos.</p>
+            <div class="contact-buttons reveal">
+                <a href="https://www.instagram.com/mdtracing.kart/" target="_blank" class="btn btn-primary">Seguinos en Instagram →</a>
+                <a href="https://ig.me/m/mdtracing.kart" target="_blank" class="btn btn-outline">Escribinos por DM →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <a href="#" class="footer-logo">MDT <span>RACING</span> 🏁</a>
+            <p class="footer-text">© 2026 MDT Racing — Buenos Aires, Argentina</p>
+            <p class="footer-text" style="font-style: italic; opacity: 0.7;">Formamos campeones, tanda a tanda.</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Navbar Scroll Effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Intersection Observer for Animations
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.1,
+            rootMargin: "0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Number Counters
+        const counters = document.querySelectorAll('.counter-item h3');
+        let hasCounted = false;
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !hasCounted) {
+                hasCounted = true;
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 2000; // ms
+                    const increment = target / (duration / 20); // updates every 20ms
+                    
+                    let current = 0;
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) {
+                            // Check if target is over 1000 for formatted display (e.g. 3,000)
+                            let display = Math.ceil(current);
+                            if(target > 1000) display = display.toLocaleString('es-AR');
+                            counter.innerText = display + (target > 100 ? '+' : '');
+                            setTimeout(updateCounter, 20);
+                        } else {
+                            let display = target;
+                             if(target > 1000) display = display.toLocaleString('es-AR');
+                            counter.innerText = display + (target > 100 ? '+' : '');
+                        }
+                    };
+                    updateCounter();
+                });
+            }
+        }, { threshold: 0.5 });
+
+        const counterSection = document.getElementById('counters');
+        if(counterSection) counterObserver.observe(counterSection);
+
+    </script>
+</body>
+</html>
