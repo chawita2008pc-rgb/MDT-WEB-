@@ -366,7 +366,7 @@
             transform: translate(-50%, -50%);
             z-index: 2;
             text-align: center;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.15s ease-out;
             pointer-events: none;
             width: 90%;
@@ -1229,6 +1229,12 @@
                     <span>Scroll</span>
                     <div class="scroll-arrow"></div>
                 </div>
+                <!-- ON-SCREEN DEBUG LOG (only shows if errors occur) -->
+                <div id="debugLogContainer"
+                    style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: lime; padding: 10px; font-family: monospace; z-index: 9999; display: none; max-width: 90vw; border: 1px solid red;">
+                    <div>⚠️ ERROR LOG:</div>
+                    <div id="debugLog"></div>
+                </div>
             </div>
         </section>
 
@@ -1777,14 +1783,19 @@
 
             // Map scroll progress to text overlay opacity
             function getTextOpacity(progress) {
-                // Fade in: 0.30 → 0.45
-                // Full: 0.45 → 0.65
-                // Fade out: 0.65 → 0.80
-                if (progress < 0.30) return 0;
-                if (progress < 0.45) return (progress - 0.30) / 0.15;
-                if (progress < 0.65) return 1;
-                if (progress < 0.80) return 1 - (progress - 0.65) / 0.15;
+                // Starts fully visible, fades out as user scrolls down
+                if (progress < 0.10) return 1;
+                if (progress < 0.30) return 1 - ((progress - 0.10) / 0.20);
                 return 0;
+            }
+
+            function logError(msg) {
+                const c = document.getElementById('debugLogContainer');
+                const log = document.getElementById('debugLog');
+                if (c) c.style.display = 'block';
+                const el = document.createElement('div');
+                el.innerText = msg;
+                if (log) log.prepend(el);
             }
 
             // Main scroll handler
@@ -1850,7 +1861,12 @@
                     };
 
                     img.onload = handleLoad;
-                    img.onerror = handleLoad;
+                    img.onerror = function () {
+                        if (i === 0 || i === 1) { // Only log first couple to avoid spam
+                            logError("Error Loading Image: " + img.src);
+                        }
+                        handleLoad();
+                    };
                     img.src = framePath(i);
                     images[i] = img;
                 }
