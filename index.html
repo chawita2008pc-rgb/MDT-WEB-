@@ -1701,12 +1701,40 @@
 
             // Build image path
             function framePath(index) {
-                return `hero-frames/frame_${String(index).padStart(3, '0')}.jpg`;
+                return `./hero-frames/frame_${String(index).padStart(3, '0')}.jpg`;
             }
 
             // Draw a frame on the canvas with "contain" fit (full image visible)
             function drawFrame(frameIndex) {
-                const img = images[frameIndex];
+                let img = images[frameIndex];
+
+                // If requested frame is not usable, find the closest usable frame
+                if (!img || !img.complete || !img.naturalWidth) {
+                    let fallbackFound = false;
+                    for (let step = 1; step <= 20; step++) {
+                        const down = frameIndex - step;
+                        const up = frameIndex + step;
+                        if (down >= 0 && images[down] && images[down].complete && images[down].naturalWidth) {
+                            img = images[down];
+                            fallbackFound = true;
+                            break;
+                        }
+                        if (up < TOTAL_FRAMES && images[up] && images[up].complete && images[up].naturalWidth) {
+                            img = images[up];
+                            fallbackFound = true;
+                            break;
+                        }
+                    }
+                    if (!fallbackFound) {
+                        for (let i = 0; i < TOTAL_FRAMES; i++) {
+                            if (images[i] && images[i].complete && images[i].naturalWidth) {
+                                img = images[i];
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 if (!img || !img.complete || !img.naturalWidth) return;
 
                 const cw = canvas.width;
@@ -1797,21 +1825,32 @@
 
             // Preload all images
             function preloadImages() {
-                function checkReady() {
-                    loadedCount++;
-                    if (loadedCount >= PRELOAD_MIN && !isReady) {
-                        isReady = true;
-                        loadingEl.classList.add('hidden');
-                        resizeCanvas();
-                        drawFrame(0);
-                        onScroll(); // Apply current scroll position
-                    }
-                }
-
                 for (let i = 0; i < TOTAL_FRAMES; i++) {
                     const img = new Image();
-                    img.onload = checkReady;
-                    img.onerror = checkReady;
+
+                    const handleLoad = function () {
+                        loadedCount++;
+                        if (loadedCount >= PRELOAD_MIN && !isReady) {
+                            // Only unblock if at least frame 0 is evaluated (loaded or errored)
+                            if (images[0] && images[0].complete) {
+                                isReady = true;
+                                loadingEl.classList.add('hidden');
+                                resizeCanvas();
+                                drawFrame(currentFrame);
+                                onScroll(); // Apply current scroll position
+                            }
+                        }
+
+                        // If animation is ready, and this image finished loading, 
+                        // manually trigger a redraw if it's the frame we are supposed to be showing.
+                        // This prevents black screens if frame 0 loads AFTER PRELOAD_MIN is reached!
+                        if (isReady && i === currentFrame) {
+                            drawFrame(currentFrame);
+                        }
+                    };
+
+                    img.onload = handleLoad;
+                    img.onerror = handleLoad;
                     img.src = framePath(i);
                     images[i] = img;
                 }
