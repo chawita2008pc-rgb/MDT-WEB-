@@ -609,7 +609,8 @@
             top: 0;
             bottom: 0;
             left: 50%;
-            margin-left: -1px;
+            transform: translateX(-50%);
+            z-index: 0;
         }
 
         .timeline-item {
@@ -617,6 +618,7 @@
             position: relative;
             background-color: inherit;
             width: 50%;
+            z-index: 1;
         }
 
         .timeline-item::after {
@@ -624,13 +626,14 @@
             position: absolute;
             width: 16px;
             height: 16px;
-            right: -8px;
-            background-color: var(--bg-primary);
+            background-color: var(--accent);
             border: 3px solid var(--accent);
             top: 25px;
             border-radius: 50%;
-            z-index: 1;
+            z-index: 3;
             box-shadow: 0 0 10px var(--accent-glow);
+            right: 0;
+            transform: translateX(50%);
         }
 
         .left {
@@ -668,7 +671,9 @@
         }
 
         .right::after {
-            left: -8px;
+            left: 0;
+            right: auto;
+            transform: translateX(-50%);
         }
 
         .timeline-content {
@@ -1122,6 +1127,8 @@
             .left::after,
             .right::after {
                 left: 23px;
+                right: auto;
+                transform: translateX(0);
             }
 
             .right {
@@ -1383,7 +1390,7 @@
         <section id="achievements" class="section-padding">
             <div class="container">
                 <div class="text-center">
-                    <h2 class="section-title reveal">PALMARÉS</h2>
+                    <h2 class="section-title reveal">LOGROS</h2>
                     <span class="section-subtitle reveal">Resultados que nos avalan</span>
                 </div>
 
