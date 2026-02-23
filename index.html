@@ -377,6 +377,19 @@
             pointer-events: auto;
         }
 
+        /* Hero text staggered reveal */
+        .hero-text-overlay > * {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .hero-text-overlay.revealed > :nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0s; }
+        .hero-text-overlay.revealed > :nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
+        .hero-text-overlay.revealed > :nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+        .hero-text-overlay.revealed > :nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.3s; }
+        .hero-text-overlay.revealed > :nth-child(5) { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
+
         .hero-title {
             font-size: 5rem;
             line-height: 0.9;
@@ -1230,6 +1243,8 @@
                     <div class="scroll-arrow"></div>
                 </div>
             </div>
+            <!-- Sentinel: triggers text reveal at ~18% scroll progress -->
+            <div id="heroRevealSentinel" aria-hidden="true" style="position: absolute; top: 118vh; height: 1px; width: 1px; pointer-events: none;"></div>
         </section>
 
         <!-- ABOUT SECTION -->
@@ -1698,6 +1713,7 @@
             let isReady = false;
             let currentFrame = 0;
             let ticking = false;
+            let textRevealed = false;
 
             // Build image path
             function framePath(index) {
@@ -1776,10 +1792,11 @@
             }
 
             // Map scroll progress to text overlay opacity
+            // Parent stays at 1 while children animate; fades out at deeper scroll
             function getTextOpacity(progress) {
-                // Starts fully visible, fades out as user scrolls down
-                if (progress < 0.10) return 1;
-                if (progress < 0.30) return 1 - ((progress - 0.10) / 0.20);
+                if (!textRevealed) return 1; // parent visible, children hidden via CSS
+                if (progress < 0.55) return 1;
+                if (progress < 0.80) return 1 - ((progress - 0.55) / 0.25);
                 return 0;
             }
 
@@ -1852,6 +1869,19 @@
                     img.src = framePath(i);
                     images[i] = img;
                 }
+            }
+
+            // Hero text reveal via IntersectionObserver (fires once)
+            const sentinel = document.getElementById('heroRevealSentinel');
+            if (sentinel) {
+                const heroRevealObserver = new IntersectionObserver(function (entries) {
+                    if (entries[0].isIntersecting && !textRevealed) {
+                        textRevealed = true;
+                        textOverlay.classList.add('revealed');
+                        heroRevealObserver.disconnect();
+                    }
+                }, { threshold: 0 });
+                heroRevealObserver.observe(sentinel);
             }
 
             // Initialize
