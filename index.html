@@ -1701,7 +1701,7 @@
 
             // Build image path
             function framePath(index) {
-                return `/hero-frames/frame_${String(index).padStart(3, '0')}.jpg`;
+                return `hero-frames/frame_${String(index).padStart(3, '0')}.jpg`;
             }
 
             // Draw a frame on the canvas with "contain" fit (full image visible)
@@ -1797,22 +1797,21 @@
 
             // Preload all images
             function preloadImages() {
+                function checkReady() {
+                    loadedCount++;
+                    if (loadedCount >= PRELOAD_MIN && !isReady) {
+                        isReady = true;
+                        loadingEl.classList.add('hidden');
+                        resizeCanvas();
+                        drawFrame(0);
+                        onScroll(); // Apply current scroll position
+                    }
+                }
+
                 for (let i = 0; i < TOTAL_FRAMES; i++) {
                     const img = new Image();
-                    img.onload = function () {
-                        loadedCount++;
-                        // Once minimum frames are loaded, show the animation
-                        if (loadedCount === PRELOAD_MIN && !isReady) {
-                            isReady = true;
-                            loadingEl.classList.add('hidden');
-                            resizeCanvas();
-                            drawFrame(0);
-                            onScroll(); // Apply current scroll position
-                        }
-                    };
-                    img.onerror = function () {
-                        loadedCount++;
-                    };
+                    img.onload = checkReady;
+                    img.onerror = checkReady;
                     img.src = framePath(i);
                     images[i] = img;
                 }
